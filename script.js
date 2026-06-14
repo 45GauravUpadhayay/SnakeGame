@@ -26,6 +26,7 @@ const rows = Math.floor(board.clientHeight / blockHight);
 
 
 let intervalId = null;
+let timerIntervalId = null;
 
 let food = {
     x:Math.floor(Math.random()*rows), y:Math.floor(Math.random()*cols)
@@ -44,7 +45,6 @@ for(let row = 0; row<rows; row++){
         const block = document.createElement("div");
         block.classList.add("block");
         board.appendChild(block);
-        block.innerText = `${row}-${col}`
         blocks[ `${row}-${col}` ] = block;
     }
 }
@@ -81,7 +81,7 @@ function render(){
         startGameModal.style.display = "none";
         
         gameOverModal.style.display = "flex"; 
-        // return;
+        return;
     }
 
 
@@ -127,13 +127,32 @@ function render(){
 
 
     startButton.addEventListener("click", () => {
-    
-        intervalId = setInterval(() => {
-        render();
-        modal.style.display = "none";
-    },300)
 
-})
+    modal.style.display = "none";
+
+    // Snake movement
+    intervalId = setInterval(render, 300);
+
+    // Timer
+    timerIntervalId = setInterval(() => {
+
+        let [min, sec] = time.split("-").map(Number);
+
+        if(sec === 59){
+            min++;
+            sec = 0;
+        } else {
+            sec++;
+        }
+
+        time =
+        `${String(min).padStart(2,"0")}-${String(sec).padStart(2,"0")}`;
+
+        timeElement.innerText = time;
+
+    }, 1000);
+
+});
 
 restartButton.addEventListener("click", restartGame)
 
@@ -171,16 +190,16 @@ function restartGame() {
 
 
 addEventListener("keydown", (eve) => {
-    if(event.key === "ArrowUp"){
+    if(eve.key === "ArrowUp"){
         direction = "up";
     }
-    else if(event.key === "ArrowDown"){
+    else if(eve.key === "ArrowDown"){
         direction = "down";
     }
-    else if(event.key === "ArrowRight"){
+    else if(eve.key === "ArrowRight"){
         direction = "right";
     }
-    else {
-        direction = "left"
+    else if(eve.key === "ArrowLeft"){
+        direction = "left";
     }
-}) 
+})
