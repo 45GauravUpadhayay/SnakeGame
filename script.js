@@ -98,9 +98,9 @@ function render(){
         score += 10;
         scoreElement.innerText = score;
 
-        if(score < highScore){
+        if(score > highScore){
             highScore = score;
-            localStorage.setItem("highScore", highScore)
+            localStorage.setItem("highScore", highScore.toString())
         }
     }
 
