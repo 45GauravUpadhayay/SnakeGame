@@ -14,9 +14,11 @@ const blockHight = 50;
 const blockWidth = 50;
 
 
-let highScore = 0;
+let highScore = sessionStorage.getItem("highScore") || 0;
 let score = 0;
 let time = `00-00`;
+
+highScoreElement.innerText = highScore;
 
 
 const cols = Math.floor(board.clientWidth / blockWidth);
@@ -100,7 +102,7 @@ function render(){
 
         if(score > highScore){
             highScore = score;
-            localStorage.setItem("highScore", highScore.toString())
+            sessionStorage.setItem("highScore", highScore.toString())
         }
     }
 
@@ -142,6 +144,14 @@ function restartGame() {
     snake.forEach(segment => {
         blocks[`${food.x}-${food.y}`].classList.remove("fill");
     })
+
+    score = 0;
+    time = `00-00`
+
+    scoreElement.innerText = score;
+    timeElement.innerText = time;
+    highScoreElement.innerText = highScore;
+
 
     modal.style.display = "none";
     direction = "down"
